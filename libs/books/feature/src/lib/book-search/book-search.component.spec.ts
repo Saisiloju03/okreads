@@ -1,14 +1,18 @@
 import { expect } from 'chai';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedTestingModule } from '@tmo/shared/testing';
+import { SharedTestingModule, createBook } from '@tmo/shared/testing';
 
 import { BooksFeatureModule } from '../books-feature.module';
 import { BookSearchComponent } from './book-search.component';
+import { ReadingListBook } from '@tmo/books/data-access';
 
-describe('ProductsListComponent', () => {
+describe('BookSearchComponent', () => {
   let component: BookSearchComponent;
   let fixture: ComponentFixture<BookSearchComponent>;
+  const books = [createBook('A')];
+  const item:ReadingListBook[] = [{...books[0],isAdded:true}]
+
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
