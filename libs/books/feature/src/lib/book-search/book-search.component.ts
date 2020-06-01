@@ -17,7 +17,6 @@ import { Book } from '@tmo/shared/models';
 })
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
-  // fix on clear empty list and on search displays old results
   public displayBooks = false;
 
   searchForm = this.fb.group({
