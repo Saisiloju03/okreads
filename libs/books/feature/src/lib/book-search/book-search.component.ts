@@ -1,31 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
   clearSearch,
   getAllBooks,
   ReadingListBook,
-  searchBooks
+  searchBooks,
+  removeFromReadingList
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/internal/Subject';
+
 
 @Component({
   selector: 'tmo-book-search',
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss']
 })
-export class BookSearchComponent implements OnInit {
+export class BookSearchComponent implements OnInit, OnDestroy {
   books: ReadingListBook[];
+  // fix on clear empty list and on search displays old results
   public displayBooks = false;
 
   searchForm = this.fb.group({
     term: ''
   });
 
+  snackBarUnsubscriber$: Subject<void> = new Subject<void>();
+  storeUnsubscriber$: Subject<ReadingListBook[]> = new Subject<
+    ReadingListBook[]
+    >();
+
+
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private snackbar: MatSnackBar
   ) {}
 
   get searchTerm(): string {
@@ -49,6 +62,20 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
+
+    this.snackbar
+      .open(book.title + ' added.', 'undo', {
+        duration: 5555,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom'
+      })
+      .onAction()
+      .pipe(takeUntil(this.snackBarUnsubscriber$))
+      .subscribe(() => {
+        const item = { ...book, bookId: book['id'] };
+        this.store.dispatch(removeFromReadingList({ item }));
+      });
+
   }
 
   searchExample() {
@@ -64,4 +91,10 @@ export class BookSearchComponent implements OnInit {
       this.store.dispatch(clearSearch());
     }
   }
+
+  ngOnDestroy() {
+    this.snackBarUnsubscriber$.complete();
+    this.storeUnsubscriber$.complete();
+  }
+
 }
