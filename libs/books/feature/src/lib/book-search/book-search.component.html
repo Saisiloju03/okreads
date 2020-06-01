@@ -11,7 +11,7 @@
 <ng-container *ngIf="displayBooks; else empty">
   <div class="book-grid">
     <div class="book" data-testing="book-item" *ngFor="let b of books; trackBy:trackByBookId">
-      <div class="book--title" >
+      <div data-testing="book--title" class="book--title" >
         {{ b.title }}
       </div>
       <div class="book--content">
@@ -26,8 +26,8 @@
           </div>
           <p [innerHTML]="b.description"></p>
           <div>
-            <button mat-flat-button color="primary" (click)="addBookToReadingList(b)" [disabled]="b.isAdded">
-              Want to Read
+            <button data-testing="Add-To-Reading" mat-flat-button color="primary" (click)="addBookToReadingList(b)" [disabled]="b.isAdded">
+              {{ b.finished ? 'Finished' : 'Want to Read ' }}
             </button>
           </div>
         </div>
