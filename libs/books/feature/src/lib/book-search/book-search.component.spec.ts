@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule, BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedTestingModule, createBook } from '@tmo/shared/testing';
 
 import { BooksFeatureModule } from '../books-feature.module';
@@ -16,7 +16,7 @@ describe('BookSearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [BooksFeatureModule, NoopAnimationsModule, SharedTestingModule]
+      imports: [BooksFeatureModule, NoopAnimationsModule, SharedTestingModule, BrowserAnimationsModule]
     }).compileComponents();
   }));
 
@@ -36,6 +36,7 @@ describe('BookSearchComponent', () => {
     const expectedDateValue = new Intl.DateTimeFormat('en-US').format(new Date(date))
 
     expect(returnValue).eq(expectedDateValue);
+
     const expectUndefined = fixture.componentInstance.formatDate(undefined);
     expect(expectUndefined).to.be.undefined
   })
@@ -61,6 +62,7 @@ describe('BookSearchComponent', () => {
 
   it('Should test eles of searchBooks()', ()=> {
     fixture.componentInstance.searchForm.value.term = null;
+    // the else will be covered. can't compare as the function dosen't returns any
     fixture.componentInstance.searchBooks();
   });
 

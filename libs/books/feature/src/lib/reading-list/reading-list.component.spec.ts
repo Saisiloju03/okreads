@@ -4,6 +4,7 @@ import { SharedTestingModule, createReadingListItem  } from '@tmo/shared/testing
 import { ReadingListComponent } from './reading-list.component';
 import { BooksFeatureModule } from '@tmo/books/feature';
 import { DebugElement } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ReadingListComponent', () => {
   let component: ReadingListComponent;
@@ -12,7 +13,7 @@ describe('ReadingListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [BooksFeatureModule, SharedTestingModule],
+      imports: [BooksFeatureModule, SharedTestingModule, BrowserAnimationsModule],
     }).compileComponents();
   }));
 
