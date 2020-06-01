@@ -111,6 +111,38 @@ describe('ToReadEffects', () => {
     });
   });
 
+  it('Should set book finished', done => {
+    const book = createBook('A');
+    const item = createReadingListItem('A');
+    actions = new ReplaySubject();
+    actions.next(ReadingListActions.finishedReading({ item }));
+
+    effects.finishBook$.subscribe(action => {
+      expect(action).to.eql(ReadingListActions.loadReadingList());
+      done();
+    });
+    httpMock
+      .expectOne(`/api/reading-list/${item.bookId}/finished`)
+      .flush(book);
+  });
+
+  it('Should fail the setting the book as finished', done => {
+    const item = createReadingListItem('A');
+    actions = new ReplaySubject();
+    actions.next(ReadingListActions.finishedReading({ item }));
+
+    effects.finishBook$.subscribe(action => {
+      expect(action).to.eql(
+        ReadingListActions.failedFinishedReading({ item })
+      );
+      done();
+    });
+    httpMock
+      .expectOne(`/api/reading-list/${item.bookId}/finished`)
+      .flush(null, { status: 400, statusText: 'Bad request' });
+  });
+
+
   it('removeBook$ should remove the book from readigList', done => {
     actions = new ReplaySubject();
 

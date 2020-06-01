@@ -23,6 +23,15 @@ export class ReadingListService {
     });
   }
 
+  async updateBook(item: ReadingListItem): Promise<void> {
+    this.storage.update(list => {
+      const index = list.findIndex(obj => obj.bookId === item.bookId)
+      list[index] = item;
+
+      return list;
+    })
+  }
+
   async removeBook(id: string): Promise<void> {
     this.storage.update(list => {
       return list.filter(x => x.bookId !== id);

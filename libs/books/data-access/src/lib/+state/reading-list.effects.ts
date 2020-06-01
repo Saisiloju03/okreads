@@ -22,7 +22,8 @@ export class ReadingListEffects implements OnInitEffects {
             );
         },
         onError: (action, error) => {
-          //console.error('Error', error);
+          // Not required
+          // console.error('Error', error);
           return ReadingListActions.loadReadingListError({ error });
         }
       })
@@ -46,6 +47,22 @@ export class ReadingListEffects implements OnInitEffects {
           return ReadingListActions.failedAddToReadingList({
             book
           });
+        }
+      })
+    )
+  );
+
+  finishBook$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ReadingListActions.finishedReading),
+      optimisticUpdate({
+        run: ({ item }) => {
+          return this.http
+            .put(`/api/reading-list/${item.bookId}/finished`, item)
+            .pipe(map(() => ReadingListActions.loadReadingList()));
+        },
+        undoAction: ({ item }) => {
+          return ReadingListActions.failedFinishedReading({ item });
         }
       })
     )

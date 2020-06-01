@@ -26,6 +26,12 @@ describe('ReadingListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('Should test finishedReading', ()=> {
+    component.finishedReading(createReadingListItem('A'))
+  })
+
+
   it('should test removeFromReadingList', ()=> {
     fixture.componentInstance.removeFromReadingList(createReadingListItem('S'));
     expect(component.readingList$).toBeTruthy();
