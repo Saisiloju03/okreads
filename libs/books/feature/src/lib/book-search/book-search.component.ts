@@ -17,6 +17,8 @@ import { Book } from '@tmo/shared/models';
 })
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
+  // fix on clear empty list and on search displays old results
+  public displayBooks = false;
 
   searchForm = this.fb.group({
     term: ''
@@ -58,6 +60,7 @@ export class BookSearchComponent implements OnInit {
   searchBooks() {
     if (this.searchForm.value.term) {
       this.store.dispatch(searchBooks({ term: this.searchTerm }));
+      this.displayBooks = true;
     } else {
       this.store.dispatch(clearSearch());
     }
