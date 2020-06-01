@@ -52,6 +52,19 @@ const readingListReducer = createReducer(
   ),
   on(ReadingListActions.removeFromReadingList, (state, action) =>
     readingListAdapter.removeOne(action.item.bookId, state)
+  ),
+
+  // remove the book from the local store if the effect for the action
+  // addToReadingList fails.
+  on(ReadingListActions.failedAddToReadingList, (state, action) =>
+    readingListAdapter.removeOne(action.book.id, state)
+  ),
+
+  // add the removed book back to the local store if the effect for the action
+  // removeFromReadingList fails.
+  on(ReadingListActions.failedRemoveFromReadingList, (state, action) =>
+    readingListAdapter.addOne({...action.item}, state)
+
   )
 );
 

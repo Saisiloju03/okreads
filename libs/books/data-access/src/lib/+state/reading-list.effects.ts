@@ -22,7 +22,7 @@ export class ReadingListEffects implements OnInitEffects {
             );
         },
         onError: (action, error) => {
-          console.error('Error', error);
+          //console.error('Error', error);
           return ReadingListActions.loadReadingListError({ error });
         }
       })

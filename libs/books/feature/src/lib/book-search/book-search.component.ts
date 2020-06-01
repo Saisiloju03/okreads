@@ -42,6 +42,9 @@ export class BookSearchComponent implements OnInit {
       ? new Intl.DateTimeFormat('en-US').format(new Date(date))
       : undefined;
   }
+  trackByBookId(index: number, book: Book): string {
+    return book.id;
+  }
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
